@@ -1,0 +1,15 @@
+framework:
+    messenger:
+        failure_transport: failed
+        transports:
+            synchronous:
+                dsn: 'safe-sync://'
+                retry_strategy:
+                    max_retries: 3
+                    delay: 1000
+                    multiplier: 2
+            failed:
+                dsn: 'doctrine://default'
+
+        routing:
+            App\DummyMessage: synchronous

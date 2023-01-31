@@ -1,0 +1,57 @@
+name: CI Workflow
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  style:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+
+      - name: Install dependencies
+        run: composer install  --prefer-dist --no-progress
+
+      - name: Check style
+        run: composer test:lint
+
+      - name: Check types
+        run: composer test:types
+
+  tests:
+    runs-on: ubuntu-22.04
+    continue-on-error: true
+    strategy:
+      matrix:
+        php:
+          - 8.0
+          - 8.1
+          - 8.2
+        symfony:
+          - 5.4.*
+          - 6.0.*
+          - 6.1.*
+          - 6.2.*
+        exclude:
+          - php: 8.0
+            symfony: 6.1.*
+          - php: 8.0
+            symfony: 6.2.*
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+
+      - name: Install dependencies
+        run: composer require symfony/messenger:${{ matrix.symfony }}  --prefer-dist --no-progress
+
+      - name: Run test suite
+        run: composer test:feature

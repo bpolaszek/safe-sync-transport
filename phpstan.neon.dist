@@ -1,0 +1,17 @@
+parameters:
+    level: 8
+    checkGenericClassInNonGenericObjectType: false
+    paths:
+        - src
+        - tests
+    ignoreErrors:
+        -
+            message: '#Call to an undefined method Pest\\Expectation\|Pest\\Support\\Extendable#'
+            path: tests/*
+        -
+            message: '#Undefined variable: \$this#'
+            path: tests/*
+
+    excludePaths:
+        - tests/app/var/*
+        - tests/pest/Symfony/GenericContainer.php

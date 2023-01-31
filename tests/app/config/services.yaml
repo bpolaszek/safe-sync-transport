@@ -1,0 +1,18 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '%kernel.project_dir%/'
+        exclude:
+            - '%kernel.project_dir%/config/'
+            - '%kernel.project_dir%/var/'
+            - '%kernel.project_dir%/DependencyInjection/'
+            - '%kernel.project_dir%/Entity/'
+            - '%kernel.project_dir%/Kernel.php'
+
+when@test:
+    services:
+        Symfony\Component\ErrorHandler\BufferingLogger: ~
+        logger: '@Symfony\Component\ErrorHandler\BufferingLogger'
